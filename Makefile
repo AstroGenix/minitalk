@@ -10,4 +10,14 @@
 #                                                                              #
 # **************************************************************************** #
 
+# Compiler and flags
+CC = CC
+CFLAGS = -Wall -Werror -Wextra
 
+# Colorize the output of the makefile
+BGREEN = \033[0;42m
+BCYAN = \033[0;46m
+WHITE = \033[37m
+NC = \033[0m
+
+# Executable names
