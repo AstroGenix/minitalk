@@ -21,3 +21,5 @@ WHITE = \033[37m
 NC = \033[0m
 
 # Executable names
+NAMECL = client
+NAMESV = server

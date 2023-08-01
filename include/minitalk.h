@@ -15,7 +15,7 @@
 
 // C libraries
 # include <stdio.h>
-# include <signals.h>
+# include <signal.h>
 # include <unistd.h>
 
 #endif
