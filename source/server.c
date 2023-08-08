@@ -19,10 +19,5 @@ int	main(int argn, char *args[])
 	int	pid;
 
 	pid = getpid();
-	if (argn != 3)
-	{
-		
-	}
-	else
-	
+	write(1,"PID: &pid\n",pid+6);
 }
