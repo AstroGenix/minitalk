@@ -11,15 +11,55 @@
 # **************************************************************************** #
 
 # Compiler and flags
-CC = CC
-CFLAGS = -Wall -Werror -Wextra
+CC = cc
+FLAGS = -Wall -Wextra -Werror
+MAKEFLAG = --no-print-directory
 
-# Colorize the output of the makefile
-BGREEN = \033[0;42m
-BCYAN = \033[0;46m
-WHITE = \033[37m
-NC = \033[0m
+# Colours
+BGRED   = \033[0;41m
+BGREEN   = \033[0;42m
+BGYELL   = \033[0;43m
+BGBLUE   = \033[0;44m
+BGPURP   = \033[0;45m
+BGCYAN   = \033[0;46m
+NC     = \033[0m
 
-# Executable names
-NAMECL = client
-NAMESV = server
+# Executable name
+NAME = 
+
+# Required Libraries
+LIBFT = libft/libft.a
+
+# Project files
+SOURCES = main.c
+OBJECTS = $(SOURCES:.c=.o)
+
+all: $(NAME)
+
+$(NAME): $(OBJECTS) $(LIBFT)
+  @printf "$(BGCYAN) Compiling so_long... $(NC)\n"
+  $(CC) $(OBJECTS) $(LIBFT)-o $(NAME)
+  @printf "$(BGREEN) Compilation finished!! $(NC)\n"
+
+$(OBJECTS_DIR): sources/%.c
+  @printf "$(BGBLUE) Creating .o files... $(NC)\n"
+  mkdir -p $(@D)
+  $(CC) -I includes $(FLAGS) -c $< -o $@
+
+$(LIBFT):
+  @printf "$(BGCYAN) Compiling Libft... $(NC)\n"
+  @$(MAKE) $(MAKEFLAG) -C libft/
+
+clean:
+  @printf "$(BGYELL) Deleting created objects... $(NC)\n"
+  rm -f $(OBJECTS)
+  @make --no-print-directory clean -C libft
+
+fclean: clean
+  @printf "$(BGYELL) Deleting executables... $(NC)\n"
+  rm -f $(NAME)
+  rm -f $(LIBFT)
+
+re: fclean all
+
+.PHONY: all clean fclean re
