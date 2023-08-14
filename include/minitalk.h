@@ -18,4 +18,7 @@
 # include <signal.h>
 # include <unistd.h>
 
+// 42 libraries
+# include "../libft/libft.h"
+
 #endif

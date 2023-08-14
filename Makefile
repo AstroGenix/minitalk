@@ -25,40 +25,43 @@ BGCYAN   = \033[0;46m
 NC     = \033[0m
 
 # Executable name
-NAME = 
+SERVER = server
+CLIENT = client
 
 # Required Libraries
 LIBFT = libft/libft.a
 
-# Project files
-SOURCES = main.c
-OBJECTS = $(SOURCES:.c=.o)
+# Project files - Server
+SERVER_SOURCES = source/server.c
+SERVER_OBJECTS = $(SERVER_SOURCES:.c=.o)
 
-all: $(NAME)
+# Project files - Client
+CLIENT_SOURCES = source/client.c
+CLIENT_OBJECTS = $(CLIENT_SOURCES:.c=.o)
 
-$(NAME): $(OBJECTS) $(LIBFT)
-  @printf "$(BGCYAN) Compiling so_long... $(NC)\n"
-  $(CC) $(OBJECTS) $(LIBFT)-o $(NAME)
-  @printf "$(BGREEN) Compilation finished!! $(NC)\n"
+all: $(SERVER) $(CLIENT)
 
-$(OBJECTS_DIR): sources/%.c
-  @printf "$(BGBLUE) Creating .o files... $(NC)\n"
-  mkdir -p $(@D)
-  $(CC) -I includes $(FLAGS) -c $< -o $@
+$(SERVER): $(SERVER_OBJECTS) $(LIBFT)
+	@printf "$(BGCYAN) Compiling server... $(NC)\n"
+	$(CC) $(FLAGS) $(SERVER_OBJECTS) $(LIBFT) -o $(SERVER)
+
+$(CLIENT): $(CLIENT_OBJECTS) $(LIBFT)
+	@printf "$(BGCYAN) Compiling client... $(NC)\n"
+	$(CC) $(FLAGS) $(CLIENT_OBJECTS) $(LIBFT) -o $(CLIENT)
 
 $(LIBFT):
-  @printf "$(BGCYAN) Compiling Libft... $(NC)\n"
-  @$(MAKE) $(MAKEFLAG) -C libft/
+	@printf "$(BGCYAN) Compiling Libft... $(NC)\n"
+	@$(MAKE) $(MAKEFLAG) -C libft/
 
 clean:
-  @printf "$(BGYELL) Deleting created objects... $(NC)\n"
-  rm -f $(OBJECTS)
-  @make --no-print-directory clean -C libft
+	@printf "$(BGYELL) Deleting created objects... $(NC)\n"
+	rm -f $(SERVER_OBJECTS) $(CLIENT_OBJECTS)
+	@make --no-print-directory clean -C libft
 
 fclean: clean
-  @printf "$(BGYELL) Deleting executables... $(NC)\n"
-  rm -f $(NAME)
-  rm -f $(LIBFT)
+	@printf "$(BGYELL) Deleting executables... $(NC)\n"
+	rm -f $(SERVER) $(CLIENT)
+	rm -f $(LIBFT)
 
 re: fclean all
 
