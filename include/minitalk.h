@@ -17,6 +17,7 @@
 # include <stdio.h>
 # include <signal.h>
 # include <unistd.h>
+# include <stdbool.h>
 
 // 42 libraries
 # include "../libft/libft.h"

@@ -32,11 +32,11 @@ CLIENT = client
 LIBFT = libft/libft.a
 
 # Project files - Server
-SERVER_SOURCES = source/server.c
+SERVER_SOURCES = source/server.c source/utils.c
 SERVER_OBJECTS = $(SERVER_SOURCES:.c=.o)
 
 # Project files - Client
-CLIENT_SOURCES = source/client.c
+CLIENT_SOURCES = source/client.c source/utils.c
 CLIENT_OBJECTS = $(CLIENT_SOURCES:.c=.o)
 
 all: $(SERVER) $(CLIENT)
