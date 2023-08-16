@@ -28,6 +28,10 @@ NC     = \033[0m
 SERVER = server
 CLIENT = client
 
+# Executable bonus name
+SERVER_BONUS = server_bonus
+CLIENT_BONUS = client_bonus
+
 # Required Libraries
 LIBFT = libft/libft.a
 
@@ -39,6 +43,14 @@ SERVER_OBJECTS = $(SERVER_SOURCES:.c=.o)
 CLIENT_SOURCES = source/client.c source/utils.c
 CLIENT_OBJECTS = $(CLIENT_SOURCES:.c=.o)
 
+# Bonus project files - Server
+SERVER_BONUS_SOURCES = source_bonus/server_bonus.c source/utils.c
+SERVER_BONUS_OBJECTS = $(SERVER_BONUS_SOURCES:.c=.o)
+
+# Bonus project files - Client
+CLIENT_BONUS_SOURCES = source_bonus/client_bonus.c source/utils.c
+CLIENT_BONUS_OBJECTS = $(CLIENT_BONUS_SOURCES:.c=.o)
+
 all: $(SERVER) $(CLIENT)
 
 $(SERVER): $(SERVER_OBJECTS) $(LIBFT)
@@ -49,6 +61,16 @@ $(CLIENT): $(CLIENT_OBJECTS) $(LIBFT)
 	@printf "$(BGCYAN) Compiling client... $(NC)\n"
 	$(CC) $(FLAGS) $(CLIENT_OBJECTS) $(LIBFT) -o $(CLIENT)
 
+bonus: $(SERVER_BONUS) $(CLIENT_BONUS)
+
+$(SERVER_BONUS): $(SERVER_BONUS_SOURCES) $(LIBFT)
+	@printf "$(BGCYAN) Compiling server bonus... $(NC)\n"
+	$(CC) $(FLAGS) $(SERVER_BONUS_OBJECTS) $(LIBFT) -o $(SERVER_BONUS)
+
+$(CLIENT_BONUS): $(CLIENT_BONUS_SOURCES) $(LIBFT)
+	@printf "$(BGCYAN) Compiling client bonus... $(NC)\n"
+	$(CC) $(FLAGS) $(CLIENT_BONUS_OBJECTS) $(LIBFT) -o $(CLIENT_BONUS)
+
 $(LIBFT):
 	@printf "$(BGCYAN) Compiling Libft... $(NC)\n"
 	@$(MAKE) $(MAKEFLAG) -C libft/
@@ -56,11 +78,13 @@ $(LIBFT):
 clean:
 	@printf "$(BGYELL) Deleting created objects... $(NC)\n"
 	rm -f $(SERVER_OBJECTS) $(CLIENT_OBJECTS)
+	rm -f $(SERVER_BONUS_OBJECTS) $(CLIENT_BONUS_OBJECTS)
 	@make --no-print-directory clean -C libft
 
 fclean: clean
 	@printf "$(BGYELL) Deleting executables... $(NC)\n"
 	rm -f $(SERVER) $(CLIENT)
+	rm -f $(SERVER_BONUS) $(CLIENT_BONUS)
 	rm -f $(LIBFT)
 
 re: fclean all
