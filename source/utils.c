@@ -22,13 +22,11 @@ void	print_err(char *str)
 
 void	util_param(void)
 {
-	write(1, "\033[0;44m", 7);
-	write(1, "./client", 8);
-	write(1, "\033[0m ", 5);
-	write(1, "\033[0;45m", 7);
+	write(1, "./client ", 9);
+	write(1, "\033[1;32m", 7);
 	write(1, "PID", 3);
-	write(1, "\033[0m ", 5);
-	write(1, "\033[0;46m", 7);
-	write(1, "\"Message here\"", 14);
-	write(1, "\033[0m\n", 5);
+	write(1, "\033[0m \"", 6);
+	write(1, "\033[1;34m", 7);
+	write(1, "Message here", 12);
+	write(1, "\033[0m\"\n", 6);
 }

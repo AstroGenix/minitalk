@@ -12,6 +12,7 @@
 
 #ifndef MINITALK_H
 # define MINITALK_H
+# define _GNU_SOURCE 
 
 // C libraries
 # include <stdio.h>
