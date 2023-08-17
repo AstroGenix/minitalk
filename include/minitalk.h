@@ -22,4 +22,8 @@
 // 42 libraries
 # include "../libft/libft.h"
 
+// Utilities
+void	print_err(char *str);
+void	util_param(void);
+
 #endif
