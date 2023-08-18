@@ -42,28 +42,16 @@ void	transmit(int pid, char *str)
 		bit = 8;
 		while (bit)
 		{
-			if (c & 0b10000000)
+			if ((c >> 7) & 1)
 				kill(pid, SIGUSR1);
 			else
 				kill(pid, SIGUSR2);
-			usleep(50);
+			usleep(100);
 			c <<= 1;
 			bit--;
 		}
 		i++;
 	}
-}
-
-void	config_signals(void)
-{
-	struct sigaction	sa_sig;
-
-	sa_sig.sa_handler = SIG_IGN;
-	sa_sig.sa_flags = SA_SIGINFO;
-	if (sigaction(SIGUSR1, &sa_sig, NULL) == -1)
-		print_err("Failed to change SIGUSR1's behavior");
-	if (sigaction(SIGUSR2, &sa_sig, NULL) == -1)
-		print_err("Failed to change SIGUSR2's behavior");
 }
 
 int	main(int argn, char *args[])
@@ -72,7 +60,7 @@ int	main(int argn, char *args[])
 
 	check_args(argn, args);
 	pid = ft_atoi(args[1]);
-	config_signals();
 	transmit(pid, args[2]);
+	transmit(pid, "\n");
 	return (0);
 }

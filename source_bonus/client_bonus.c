@@ -18,7 +18,7 @@ void	check_args(int argn, char *args[])
 
 	i = 0;
 	if (argn != 3)
-		print_err("Wrong parameters.");
+		print_err("Incorrect number of parameters.");
 	while (args[1][i])
 	{
 		if (ft_isdigit(args[1][i]) == 0)
@@ -26,15 +26,15 @@ void	check_args(int argn, char *args[])
 		i++;
 	}
 	if (!args[2][0])
-		print_err("No message was writen!");
+		print_err("Message field empty.");
 }
 
 void	transmit(int pid, char *str)
 {
-	char	c;
-	int		bit;
-	int		i;
-	
+	unsigned char	c;
+	int				bit;
+	int				i;
+
 	i = 0;
 	while (str[i])
 	{
@@ -42,11 +42,11 @@ void	transmit(int pid, char *str)
 		bit = 8;
 		while (bit)
 		{
-			if (c & 0b10000000)
+			if ((c >> 7) & 1)
 				kill(pid, SIGUSR1);
 			else
 				kill(pid, SIGUSR2);
-			usleep(50);
+			usleep(100);
 			c <<= 1;
 			bit--;
 		}
@@ -54,33 +54,24 @@ void	transmit(int pid, char *str)
 	}
 }
 
-void	sig_handle(int sighup)
+void	sig_letter(int signo)
 {
-	if (sighup == SIGUSR2)
-		write(1, "Character has been sucessfully receieved!\n", 42);
-}
-
-void	config_signals(void)
-{
-	struct sigaction	sa_sig;
-
-	sa_sig.sa_handler = &sig_handle;
-	sa_sig.sa_flags = SA_SIGINFO;
-	if (sigaction(SIGURSR1, &sa_sig, NULL) == -1)
-		print_err("Unable to send SIGUSR1 signal.");
-	if (sigaction(SIGURSR2, &sa_sig, NULL) == -1)
-		print_err("Unable to send SIGUSR2 signal.");
+	if (signo == SIGUSR2)
+		write(1, "Character received.\n", 20);
 }
 
 int	main(int argn, char *args[])
 {
-	int	pid;
+	pid_t				pid;
+	struct sigaction	s_sig;
 
-    check_args(argn, args);
+	check_args(argn, args);
 	pid = ft_atoi(args[1]);
-	config_signals();
+	s_sig.sa_handler = &sig_letter;
+	if (sigaction(SIGUSR1, &s_sig, NULL) == -1)
+		print_err("Client: SIGUSR1 failed.");
+	if (sigaction(SIGUSR2, &s_sig, NULL) == -1)
+		print_err("Client: SIGUSR2 failed.");
 	transmit(pid, args[2]);
-	while (true)
-		pause();
 	return (0);
 }

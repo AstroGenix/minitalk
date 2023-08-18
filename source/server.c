@@ -12,47 +12,39 @@
 
 #include "../include/minitalk.h"
 
-void	user_sig(int signum, siginfo_t *info, void *ucontent)
+void	user_sig(int signo)
 {
-	static int				bit_itr = -1;
-	static unsigned char	c;
+	static int	bit;
+	static int	c;
+	int			i;
 
-	if (bit_itr < 0)
-		bit_itr = 7;
-	if (signum == SIGUSR1)
-		c |= (1 << bit_itr);
-	bit_itr--;
-	if (bit_itr < 0 && c)
+	if (signo == SIGUSR1)
+		i = 1;
+	else
+		i = 0;
+	c = (c << 1) + i;
+	bit++;
+	if (bit == 8)
 	{
-		ft_putchar_fd(c, STDOUT_FILENO);
+		write(1, &c, 1);
+		bit = 0;
 		c = 0;
-		if (kill(info->si_pid, SIGUSR2) == -1)
-			print_err("Server failed to send SIGUSR2");
-		return ;
 	}
-	if (kill(info->si_pid, SIGUSR1) == -1)
-		print_err("Failed to send SIGUSR1");
 }
 
 int	main(int argn, char *args[])
 {
-	int					pid;
-	struct sigaction	sa_sig;
+	int	pid;
 
 	pid = getpid();
 	write(1, "PID: [", 6);
+	write(1, "\e[1m", 4);
 	ft_putnbr_fd(pid, 1);
+	write(1, "\e[0m", 4);
 	write(1, "]\n", 2);
-	
+	signal(SIGUSR1, user_sig);
+	signal(SIGUSR2, user_sig);
 	while (true)
-	{
-		sa_sig.sa_sigaction = &user_sig;
-		sa_sig.sa_flags = SA_SIGINFO;
-		if (sigaction(SIGUSR1, &sa_sig, NULL) == -1)
-			print_err("Unable to send SIGUSR1 signal.");
-		if (sigaction(SIGUSR2, &sa_sig, NULL) == -1)
-			print_err("Unable to send SIGUSR2 signal.");
-	}
+		pause ();
 	return (0);
 }
-	
