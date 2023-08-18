@@ -43,6 +43,7 @@ int	main(int argn, char *args[])
 	write(1, "]\n", 2);
 	s_sig.sa_sigaction = &user_sig;
 	s_sig.sa_flags = SA_SIGINFO;
+	sigemptyset(&s_sig.sa_mask);
 	if (sigaction(SIGUSR1, &s_sig, NULL) == -1)
 		print_err("Server: SIGUSR1 failed setup");
 	if (sigaction(SIGUSR2, &s_sig, NULL) == -1)
